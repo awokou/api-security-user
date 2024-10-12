@@ -1,4 +1,4 @@
-package com.luv2code.api.security.user.config;
+package com.luv2code.api.security.user.config.jwt;
 
 import com.luv2code.api.security.user.service.JwtService;
 import io.micrometer.common.util.StringUtils;
