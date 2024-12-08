@@ -10,6 +10,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/db_security?schema=public
     username: postgres
     password: postgres
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -20,6 +21,17 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: noreply@gmail.com
+    password: admin
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 application:
   security:

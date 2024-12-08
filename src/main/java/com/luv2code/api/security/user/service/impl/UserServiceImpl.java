@@ -15,7 +15,10 @@ import com.luv2code.api.security.user.service.JwtService;
 import com.luv2code.api.security.user.service.RefreshTokenService;
 import com.luv2code.api.security.user.service.UserService;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,11 +27,17 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.security.Principal;
 import java.time.Instant;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+
+    @Value("${spring.mail.username}")
+    private String username;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -36,18 +45,22 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
     private final HistoricRepository historicRepository;
+    private final JavaMailSender javaMailSender;
 
-    public UserServiceImpl(PasswordEncoder passwordEncoder, JwtService jwtService, UserRepository userRepository, AuthenticationManager authenticationManager, RefreshTokenService refreshTokenService, HistoricRepository historicRepository) {
+    public UserServiceImpl(PasswordEncoder passwordEncoder, JwtService jwtService, UserRepository userRepository, AuthenticationManager authenticationManager, RefreshTokenService refreshTokenService, HistoricRepository historicRepository, JavaMailSender javaMailSender) {
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.refreshTokenService = refreshTokenService;
         this.historicRepository = historicRepository;
+        this.javaMailSender = javaMailSender;
     }
 
     @Override
     public AuthenticationResponse register(UserDto userDto) {
+        Calendar calendar = new GregorianCalendar();
+        int year = calendar.get(Calendar.YEAR);
         if(userRepository.existsByEmail(userDto.getEmail())) {
             throw  new UsernameAlreadyExistsException(ExceptionMessages.USERNAME_ALREADY_EXISTS, HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST);
         }
@@ -55,7 +68,7 @@ public class UserServiceImpl implements UserService {
         user.setFirstname(userDto.getFirstname());
         user.setLastname(userDto.getLastname());
         user.setEmail(userDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setPassword(passwordEncoder.encode(userDto.getFirstname() + year));
         user.setRole(Role.ADMIN);
 
         user = userRepository.save(user);
@@ -67,7 +80,7 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(SimpleGrantedAuthority::getAuthority)
                 .toList();
-
+        sendEmail(user);
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
                 .firstname(user.getFirstname())
@@ -131,5 +144,18 @@ public class UserServiceImpl implements UserService {
         historic.setLoginTime(Instant.now());
 
         return this.historicRepository.save(historic);
+    }
+
+    private void sendEmail(User user) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom(username);
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject("Creation de compte");
+        Calendar calendar = new GregorianCalendar();
+        int year = calendar.get(Calendar.YEAR);
+        String message = "Mot de passe : " + user.getFirstname() + year;
+        mailMessage.setText(message);
+
+        javaMailSender.send(mailMessage);
     }
 }
