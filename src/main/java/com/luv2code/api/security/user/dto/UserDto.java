@@ -4,7 +4,6 @@ import com.luv2code.api.security.user.entity.enums.Role;
 import com.luv2code.api.security.user.validation.StrongPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +24,7 @@ public class UserDto {
     private String email;
 
     @NotBlank(message = "password is required")
-    //@StrongPassword
+    @StrongPassword
     private String password;
 
     //@NotNull

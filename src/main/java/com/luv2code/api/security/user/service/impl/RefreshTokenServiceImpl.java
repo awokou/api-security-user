@@ -40,7 +40,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public RefreshToken createRefreshToken(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-
         RefreshToken refreshToken = RefreshToken.builder()
                 .revoked(false)
                 .user(user)
@@ -66,7 +65,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public Optional<RefreshToken> findByToken(String token) {
-
         return refreshTokenRepository.findByToken(token);
     }
 

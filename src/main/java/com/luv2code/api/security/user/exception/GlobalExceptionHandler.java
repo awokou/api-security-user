@@ -1,9 +1,7 @@
 package com.luv2code.api.security.user.exception;
 
-import com.luv2code.api.security.user.entity.enums.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +17,6 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = TokenException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResponseEntity<ErrorResponse> handleRefreshTokenException(TokenException ex, WebRequest request) {
         final ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(Instant.now())
@@ -47,15 +43,15 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UsernameAlreadyExistsException.class)
-    public ResponseEntity<ApiResponseException> usernameAlreadyExistsException(UsernameAlreadyExistsException exception) {
-        ApiResponseException apiResponseException = new ApiResponseException(exception.getMessage(), exception.getCode(), exception.getHttp());
-        return ResponseEntity.status(exception.getHttp()).body(apiResponseException);
-    }
+    public ResponseEntity<ErrorResponse> usernameAlreadyExistsException(Exception ex,WebRequest request) {
+        final ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(Instant.now())
+                .error("Error")
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(ex.getMessage())
+                .path(request.getDescription(false))
+                .build();
 
-
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleException(HttpMessageNotReadableException ex) {
-        return new ResponseEntity<>("Cannot parse JSON :: accepted roles "+ Arrays.toString(Role.values()),HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
     }
 }

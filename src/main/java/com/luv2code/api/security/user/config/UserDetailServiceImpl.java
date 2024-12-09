@@ -1,4 +1,4 @@
-package com.luv2code.api.security.user.service.impl;
+package com.luv2code.api.security.user.config;
 
 import com.luv2code.api.security.user.repository.UserRepository;
 import org.springframework.context.annotation.Bean;

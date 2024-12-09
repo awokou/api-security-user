@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
-@Builder
+
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "refresh_token")

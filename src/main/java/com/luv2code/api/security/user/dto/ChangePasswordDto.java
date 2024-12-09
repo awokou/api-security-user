@@ -1,11 +1,9 @@
 package com.luv2code.api.security.user.dto;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 @Builder
 public class ChangePasswordDto {
     private String currentPassword;

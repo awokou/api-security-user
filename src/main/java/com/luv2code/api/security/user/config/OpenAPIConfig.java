@@ -13,24 +13,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         info = @Info(
-                contact = @Contact(
-                        name = "AWOKOU Komivi",
-                        email = "kawokou122@gmail.com"
-                ),
-                title = "Backend - API SECURITY USER",
-                description = "Spring Boot 3+ Spring Security 6",
-                version = "0.0.1"
+                contact = @Contact(name = "Lopezino", email = "kawokou122@gmail.com"),
+                title = "API SECURITY USER", description = "Users", version = "1.0.0"
         ),
         servers = {
-                @Server(
-                        description = "Development",
-                        url = "http://localhost:8080"
-                )
+                @Server(description = "Development", url = "http://localhost:8080")
         },
         security = {
-                @SecurityRequirement(
-                        name = "bearerAuth"
-                )
+                @SecurityRequirement(name = "bearerAuth")
         }
 )
 @SecurityScheme(

@@ -7,7 +7,6 @@ import com.luv2code.api.security.user.entity.Historic;
 import com.luv2code.api.security.user.entity.User;
 import com.luv2code.api.security.user.entity.enums.Role;
 import com.luv2code.api.security.user.entity.response.AuthenticationResponse;
-import com.luv2code.api.security.user.exception.ExceptionMessages;
 import com.luv2code.api.security.user.exception.UsernameAlreadyExistsException;
 import com.luv2code.api.security.user.repository.HistoricRepository;
 import com.luv2code.api.security.user.repository.UserRepository;
@@ -16,10 +15,10 @@ import com.luv2code.api.security.user.service.RefreshTokenService;
 import com.luv2code.api.security.user.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.security.Principal;
 import java.time.Instant;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -62,7 +60,7 @@ public class UserServiceImpl implements UserService {
         Calendar calendar = new GregorianCalendar();
         int year = calendar.get(Calendar.YEAR);
         if(userRepository.existsByEmail(userDto.getEmail())) {
-            throw  new UsernameAlreadyExistsException(ExceptionMessages.USERNAME_ALREADY_EXISTS, HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST);
+            throw  new UsernameAlreadyExistsException("There is already a user with this");
         }
         var user = new User();
         user.setFirstname(userDto.getFirstname());
@@ -80,7 +78,9 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(SimpleGrantedAuthority::getAuthority)
                 .toList();
-        sendEmail(user);
+
+        this.sendEmail(user);
+
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
                 .firstname(user.getFirstname())
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(),loginDto.getPassword()));
 
         var user = userRepository.findByEmail(loginDto.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
+                .orElseThrow(() -> new BadCredentialsException("Invalid email or password."));
 
         var roles = user.getRole().getAuthorities()
                 .stream()
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
         var accessToken = jwtService.generateToken(user);
         var refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
-        getConnect(user.getId());
+        this.getConnect(user.getId());
 
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
@@ -132,9 +132,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changePassword(ChangePasswordDto changePasswordDto, Principal principal) {
-
-    }
+    public void changePassword(ChangePasswordDto changePasswordDto, Principal principal) {}
 
     private Historic getConnect(Long id) {
         User user = this.userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
