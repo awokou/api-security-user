@@ -3,7 +3,7 @@ package com.luv2code.api.security.user.service.impl;
 import com.luv2code.api.security.user.dto.RefreshTokenDto;
 import com.luv2code.api.security.user.entity.RefreshToken;
 import com.luv2code.api.security.user.entity.User;
-import com.luv2code.api.security.user.entity.response.RefreshTokenResponse;
+import com.luv2code.api.security.user.dto.RefreshTokenResponse;
 import com.luv2code.api.security.user.exception.TokenException;
 import com.luv2code.api.security.user.repository.RefreshTokenRepository;
 import com.luv2code.api.security.user.repository.UserRepository;

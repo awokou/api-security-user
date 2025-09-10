@@ -1,4 +1,4 @@
-package com.luv2code.api.security.user.entity.response;
+package com.luv2code.api.security.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

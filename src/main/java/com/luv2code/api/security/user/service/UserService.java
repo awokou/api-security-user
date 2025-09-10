@@ -5,7 +5,7 @@ import com.luv2code.api.security.user.dto.LoginDto;
 import com.luv2code.api.security.user.dto.UserDto;
 import com.luv2code.api.security.user.entity.Historic;
 import com.luv2code.api.security.user.entity.User;
-import com.luv2code.api.security.user.entity.response.AuthenticationResponse;
+import com.luv2code.api.security.user.dto.AuthenticationResponse;
 
 import java.security.Principal;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.luv2code.api.security.user.entity.response;
+package com.luv2code.api.security.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

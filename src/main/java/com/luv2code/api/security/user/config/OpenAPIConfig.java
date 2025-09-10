@@ -12,8 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(
-        info = @Info(
-                contact = @Contact(name = "Lopezino", email = "kawokou122@gmail.com"),
+        info = @Info(contact = @Contact(name = "Lopezino", email = "kawokou122@gmail.com"),
                 title = "API SECURITY USER", description = "Users", version = "1.0.0"
         ),
         servers = {
@@ -31,5 +30,4 @@ import org.springframework.context.annotation.Configuration;
         bearerFormat = "JWT",
         in = SecuritySchemeIn.HEADER
 )
-public class OpenAPIConfig {
-}
+public class OpenAPIConfig {}

@@ -6,7 +6,7 @@ import com.luv2code.api.security.user.dto.UserDto;
 import com.luv2code.api.security.user.entity.Historic;
 import com.luv2code.api.security.user.entity.User;
 import com.luv2code.api.security.user.entity.enums.Role;
-import com.luv2code.api.security.user.entity.response.AuthenticationResponse;
+import com.luv2code.api.security.user.dto.AuthenticationResponse;
 import com.luv2code.api.security.user.exception.UsernameAlreadyExistsException;
 import com.luv2code.api.security.user.repository.HistoricRepository;
 import com.luv2code.api.security.user.repository.UserRepository;
