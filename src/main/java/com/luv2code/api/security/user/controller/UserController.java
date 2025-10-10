@@ -1,6 +1,6 @@
 package com.luv2code.api.security.user.controller;
 
-import com.luv2code.api.security.user.dto.ChangePasswordDto;
+
 import com.luv2code.api.security.user.dto.LoginDto;
 import com.luv2code.api.security.user.dto.RefreshTokenDto;
 import com.luv2code.api.security.user.dto.UserDto;
@@ -19,9 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api")
@@ -68,11 +66,5 @@ public class UserController {
     @GetMapping("/info")
     public Authentication getAuthentication(@RequestBody LoginDto loginDto){
         return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(),loginDto.getPassword()));
-    }
-
-    @PatchMapping("/change_password")
-    public ResponseEntity<Objects> changePassword(@RequestBody ChangePasswordDto changePasswordDto, Principal principal) {
-        userService.changePassword(changePasswordDto, principal);
-        return ResponseEntity.ok().build();
     }
 }

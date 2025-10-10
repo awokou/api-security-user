@@ -1,4 +1,4 @@
-package com.luv2code.api.security.user.validation;
+package com.luv2code.api.security.user.annotations;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

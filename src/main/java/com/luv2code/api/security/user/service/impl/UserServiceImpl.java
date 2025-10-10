@@ -1,13 +1,13 @@
 package com.luv2code.api.security.user.service.impl;
 
-import com.luv2code.api.security.user.dto.ChangePasswordDto;
+
 import com.luv2code.api.security.user.dto.LoginDto;
 import com.luv2code.api.security.user.dto.UserDto;
 import com.luv2code.api.security.user.entity.Historic;
 import com.luv2code.api.security.user.entity.User;
 import com.luv2code.api.security.user.entity.enums.Role;
 import com.luv2code.api.security.user.dto.AuthenticationResponse;
-import com.luv2code.api.security.user.exception.UsernameAlreadyExistsException;
+import com.luv2code.api.security.user.exception.AlreadyExistsException;
 import com.luv2code.api.security.user.repository.HistoricRepository;
 import com.luv2code.api.security.user.repository.UserRepository;
 import com.luv2code.api.security.user.service.JwtService;
@@ -24,7 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.security.Principal;
+
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
         Calendar calendar = new GregorianCalendar();
         int year = calendar.get(Calendar.YEAR);
         if(userRepository.existsByEmail(userDto.getEmail())) {
-            throw  new UsernameAlreadyExistsException("There is already a user with this");
+            throw  new AlreadyExistsException("There is already a user with this");
         }
         var user = new User();
         user.setFirstname(userDto.getFirstname());
@@ -125,14 +125,6 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() {
         return this.userRepository.findAll();
     }
-
-    @Override
-    public List<Historic> getAllConnect() {
-        return this.historicRepository.findAll();
-    }
-
-    @Override
-    public void changePassword(ChangePasswordDto changePasswordDto, Principal principal) {}
 
     private Historic getConnect(Long id) {
         User user = this.userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));

@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> usernameAlreadyExistsException(Exception ex,WebRequest request) {
         final ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(Instant.now())

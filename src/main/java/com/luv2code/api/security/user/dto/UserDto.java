@@ -1,14 +1,12 @@
 package com.luv2code.api.security.user.dto;
 
-import com.luv2code.api.security.user.entity.enums.Role;
-import com.luv2code.api.security.user.validation.StrongPassword;
+import com.luv2code.api.security.user.annotations.StrongPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
@@ -26,7 +24,4 @@ public class UserDto {
     @NotBlank(message = "password is required")
     @StrongPassword
     private String password;
-
-    //@NotNull
-    //private Role role;
 }

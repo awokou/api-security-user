@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Instant;
 import java.util.Base64;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -61,11 +60,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             throw new TokenException(token.getToken(), "Refresh token was expired. Please make a new authentication request");
         }
         return token;
-    }
-
-    @Override
-    public Optional<RefreshToken> findByToken(String token) {
-        return refreshTokenRepository.findByToken(token);
     }
 
     @Override
