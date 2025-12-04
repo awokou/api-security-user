@@ -3,11 +3,8 @@ package com.luv2code.api.security.user.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class RefreshTokenResponse {
 
     @JsonProperty("access_token")

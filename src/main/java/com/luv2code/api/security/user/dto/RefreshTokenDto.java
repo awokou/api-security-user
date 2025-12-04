@@ -1,10 +1,8 @@
 package com.luv2code.api.security.user.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class RefreshTokenDto {
     private String refreshToken;
 }

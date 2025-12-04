@@ -9,8 +9,6 @@ import com.luv2code.api.security.user.dto.AuthenticationResponse;
 import com.luv2code.api.security.user.dto.RefreshTokenResponse;
 import com.luv2code.api.security.user.service.RefreshTokenService;
 import com.luv2code.api.security.user.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,14 +35,6 @@ public class UserController {
 
     @GetMapping("/users")
     @PreAuthorize("hasAuthority('READ') and hasRole('ADMIN')")
-    @Operation(
-            description = "This endpoint require a valid JWT, ADMIN role with READ",
-            summary = "User secured endpoint",
-            responses = {
-                    @ApiResponse(description = "Success", responseCode = "200"),
-                    @ApiResponse(description = "Unauthorized", responseCode = "401")
-            }
-    )
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }

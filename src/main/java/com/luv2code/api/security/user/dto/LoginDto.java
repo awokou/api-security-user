@@ -2,11 +2,8 @@ package com.luv2code.api.security.user.dto;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class LoginDto {
     private String email;
     private String password;

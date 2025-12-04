@@ -3,12 +3,10 @@ package com.luv2code.api.security.user.service.impl;
 
 import com.luv2code.api.security.user.dto.LoginDto;
 import com.luv2code.api.security.user.dto.UserDto;
-import com.luv2code.api.security.user.entity.Historic;
 import com.luv2code.api.security.user.entity.User;
 import com.luv2code.api.security.user.entity.enums.Role;
 import com.luv2code.api.security.user.dto.AuthenticationResponse;
 import com.luv2code.api.security.user.exception.AlreadyExistsException;
-import com.luv2code.api.security.user.repository.HistoricRepository;
 import com.luv2code.api.security.user.repository.UserRepository;
 import com.luv2code.api.security.user.service.JwtService;
 import com.luv2code.api.security.user.service.RefreshTokenService;
@@ -25,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 
-import java.time.Instant;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -42,18 +39,22 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
-    private final HistoricRepository historicRepository;
     private final JavaMailSender javaMailSender;
 
-    public UserServiceImpl(PasswordEncoder passwordEncoder, JwtService jwtService, UserRepository userRepository, AuthenticationManager authenticationManager, RefreshTokenService refreshTokenService, HistoricRepository historicRepository, JavaMailSender javaMailSender) {
+    public UserServiceImpl(PasswordEncoder passwordEncoder,
+                           JwtService jwtService,
+                           UserRepository userRepository,
+                           AuthenticationManager authenticationManager,
+                           RefreshTokenService refreshTokenService,
+                           JavaMailSender javaMailSender) {
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.refreshTokenService = refreshTokenService;
-        this.historicRepository = historicRepository;
         this.javaMailSender = javaMailSender;
     }
+
 
     @Override
     public AuthenticationResponse register(UserDto userDto) {
@@ -108,8 +109,6 @@ public class UserServiceImpl implements UserService {
         var accessToken = jwtService.generateToken(user);
         var refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
-        this.getConnect(user.getId());
-
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
                 .roles(roles)
@@ -124,16 +123,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return this.userRepository.findAll();
-    }
-
-    private Historic getConnect(Long id) {
-        User user = this.userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        Historic historic = new  Historic();
-        historic.setName("connect");
-        historic.setUser(user);
-        historic.setLoginTime(Instant.now());
-
-        return this.historicRepository.save(historic);
     }
 
     private void sendEmail(User user) {
