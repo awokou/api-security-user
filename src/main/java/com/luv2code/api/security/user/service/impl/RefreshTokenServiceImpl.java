@@ -24,16 +24,16 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final UserService jwtService;
+    private final UserService userService;
 
-    @Value("${application.security.jwt.refresh-token.expiration}")
+    @Value("${security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
 
     public RefreshTokenServiceImpl(UserRepository userRepository, RefreshTokenRepository refreshTokenRepository,
-            UserService jwtService) {
+            UserService userService) {
         this.userRepository = userRepository;
         this.refreshTokenRepository = refreshTokenRepository;
-        this.jwtService = jwtService;
+        this.userService = userService;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                 .map(RefreshToken::getUser)
                 .orElseThrow(() -> new TokenException(request.getRefreshToken(), "Refresh token does not exist"));
 
-        String token = jwtService.generateToken(user);
+        String token = userService.generateToken(user);
 
         return RefreshTokenResponse.builder()
                 .accessToken(token)
