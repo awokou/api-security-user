@@ -6,14 +6,13 @@ import java.util.List;
 
 @Data
 @Builder
-public class AuthenticationResponse {
+public class AuthResponse {
 
-    private  Long id;
-    private String firstname;
-    private String lastname;
+    private Long id;
+    private String firstName;
+    private String lastName;
     private String email;
     private List<String> roles;
     private String accessToken;
     private String refreshToken;
-
 }

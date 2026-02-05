@@ -6,6 +6,8 @@ import com.luv2code.api.security.user.dto.RefreshTokenResponse;
 
 public interface RefreshTokenService {
     RefreshToken createRefreshToken(Long id);
+
     RefreshToken verifyExpiration(RefreshToken token);
+
     RefreshTokenResponse generateNewToken(RefreshTokenDto refreshTokenDto);
 }

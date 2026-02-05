@@ -6,13 +6,16 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Data
+@NoArgsConstructor
 public class UserDto {
 
+    private Long id;
+
     @NotBlank(message = "firstname is required")
-    private String firstname;
+    private String firstName;
 
     @NotBlank(message = "lastname is required")
-    private String lastname;
+    private String lastName;
 
     @NotBlank(message = "email is required")
     @Email(message = "email format is not valid")

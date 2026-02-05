@@ -7,10 +7,10 @@ import com.luv2code.api.security.user.dto.RefreshTokenResponse;
 import com.luv2code.api.security.user.exception.TokenException;
 import com.luv2code.api.security.user.repository.RefreshTokenRepository;
 import com.luv2code.api.security.user.repository.UserRepository;
-import com.luv2code.api.security.user.service.JwtService;
 import com.luv2code.api.security.user.service.RefreshTokenService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.luv2code.api.security.user.service.UserService;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -18,19 +18,19 @@ import java.time.Instant;
 import java.util.Base64;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class RefreshTokenServiceImpl implements RefreshTokenService {
 
-    private static final Logger logger = LoggerFactory.getLogger(RefreshTokenServiceImpl.class);
-
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final JwtService jwtService;
+    private final UserService jwtService;
 
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
 
-    public RefreshTokenServiceImpl(UserRepository userRepository, RefreshTokenRepository refreshTokenRepository, JwtService jwtService) {
+    public RefreshTokenServiceImpl(UserRepository userRepository, RefreshTokenRepository refreshTokenRepository,
+            UserService jwtService) {
         this.userRepository = userRepository;
         this.refreshTokenRepository = refreshTokenRepository;
         this.jwtService = jwtService;
@@ -51,13 +51,14 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshToken verifyExpiration(RefreshToken token) {
-        if(token == null){
-            logger.error("Token is null");
+        if (token == null) {
+            log.error("Token is null");
             throw new TokenException(null, "Token is null");
         }
-        if(token.getExpiryDate().compareTo(Instant.now()) < 0 ){
+        if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
-            throw new TokenException(token.getToken(), "Refresh token was expired. Please make a new authentication request");
+            throw new TokenException(token.getToken(),
+                    "Refresh token was expired. Please make a new authentication request");
         }
         return token;
     }
@@ -67,7 +68,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         User user = refreshTokenRepository.findByToken(request.getRefreshToken())
                 .map(this::verifyExpiration)
                 .map(RefreshToken::getUser)
-                .orElseThrow(() -> new TokenException(request.getRefreshToken(),"Refresh token does not exist"));
+                .orElseThrow(() -> new TokenException(request.getRefreshToken(), "Refresh token does not exist"));
 
         String token = jwtService.generateToken(user);
 

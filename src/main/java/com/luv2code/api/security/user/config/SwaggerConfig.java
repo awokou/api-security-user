@@ -11,23 +11,11 @@ import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@OpenAPIDefinition(
-        info = @Info(contact = @Contact(name = "Lopezino", email = "kawokou122@gmail.com"),
-                title = "API SECURITY USER", description = "Users", version = "1.0.0"
-        ),
-        servers = {
-                @Server(description = "Development", url = "http://localhost:8080")
-        },
-        security = {
-                @SecurityRequirement(name = "bearerAuth")
-        }
-)
-@SecurityScheme(
-        name = "bearerAuth",
-        description = "JWT auth description",
-        scheme = "bearer",
-        type = SecuritySchemeType.HTTP,
-        bearerFormat = "JWT",
-        in = SecuritySchemeIn.HEADER
-)
-public class SwaggerConfig {}
+@OpenAPIDefinition(info = @Info(contact = @Contact(name = "Lopezino", email = "kawokou122@gmail.com"), title = "SECURITY USER", description = "Users", version = "1.0.0"), servers = {
+        @Server(description = "Development", url = "http://localhost:8080")
+}, security = {
+        @SecurityRequirement(name = "bearerAuth")
+})
+@SecurityScheme(name = "bearerAuth", description = "JWT auth description", scheme = "bearer", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", in = SecuritySchemeIn.HEADER)
+public class SwaggerConfig {
+}

@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
                 .path(request.getDescription(false))
                 .build();
 
-        return new ResponseEntity<>(errorResponse,HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(AlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> usernameAlreadyExistsException(Exception ex,WebRequest request) {
+    public ResponseEntity<ErrorResponse> usernameAlreadyExistsException(Exception ex, WebRequest request) {
         final ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(Instant.now())
                 .error("Error")
@@ -52,6 +52,6 @@ public class GlobalExceptionHandler {
                 .path(request.getDescription(false))
                 .build();
 
-        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

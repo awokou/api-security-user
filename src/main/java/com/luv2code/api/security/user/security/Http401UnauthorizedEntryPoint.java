@@ -1,37 +1,37 @@
-package com.luv2code.api.security.user.config;
+package com.luv2code.api.security.user.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.luv2code.api.security.user.exception.ErrorResponse;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.http.MediaType;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.Instant;
 
+@Slf4j
 @Component
-public class CustomAccessDeniedHandler implements AccessDeniedHandler {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CustomAccessDeniedHandler.class);
+public class Http401UnauthorizedEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
-        LOGGER.error("Access denied error: {}", accessDeniedException.getMessage());
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
+            throws IOException, ServletException {
+        log.error("Unauthorized error: {}", authException.getMessage());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         ErrorResponse body = ErrorResponse.builder()
-                .status(HttpServletResponse.SC_FORBIDDEN)
-                .error("Forbidden")
+                .status(HttpServletResponse.SC_UNAUTHORIZED)
+                .error("Unauthorized")
                 .timestamp(Instant.now())
-                .message(accessDeniedException.getMessage())
+                .message(authException.getMessage())
                 .path(request.getServletPath())
                 .build();
         final ObjectMapper mapper = new ObjectMapper();

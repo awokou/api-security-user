@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-
 @Data
 @Entity
 @Table(name = "users")
@@ -20,23 +19,25 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "first_name")
-    private String firstname;
+    private String firstName;
 
     @Column(name = "last_name")
-    private String lastname;
+    private String lastName;
 
     @Email(message = "Email must be valid")
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     private String password;
 
+    @Column(name = "roles")
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role roles;
 
     // we should return a list of roles
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role.getAuthorities();
+        return roles.getAuthorities();
     }
 
     @Override
@@ -47,21 +48,6 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
     }
 
     @Override

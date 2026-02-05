@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.time.Instant;
 
-
 @Data
 @Entity
 @Builder

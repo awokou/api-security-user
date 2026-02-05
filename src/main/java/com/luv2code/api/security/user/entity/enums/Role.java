@@ -10,8 +10,8 @@ import static com.luv2code.api.security.user.entity.enums.Permission.*;
 
 public enum Role {
 
-    ADMIN(Set.of(READ,CREATE,UPDATE,DELETE)),
-    USER(Set.of(READ,CREATE));
+    ADMIN(Set.of(READ, CREATE, UPDATE, DELETE)),
+    USER(Set.of(READ, CREATE));
 
     @Getter
     private final Set<Permission> permissions;
